@@ -1,14 +1,5 @@
 package com.ssamz.demo.dto;
 
-public class UserDTO<T> {
-    private int status;
-
-    private T data;
-}
-
-/*
-package com.ssamz.demo.dto;
-
         import javax.validation.constraints.Email;
         import javax.validation.constraints.NotBlank;
         import javax.validation.constraints.NotNull;
@@ -36,4 +27,3 @@ public class UserDTO {
     @Email(message = "이메일 형식이 아닙니다.")
     private String email;
 }
-*/

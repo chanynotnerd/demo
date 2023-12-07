@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data    // Lombok 라이브러리의 어노테이션, 클래스 내 모든 필드에 대한 getter, setter 자동 생성
 @AllArgsConstructor    // 모든 필드의 값을 파라미터로 받는 생성자를 만듬
@@ -36,5 +37,10 @@ public class Post {
     @ManyToOne(fetch = FetchType.EAGER)	// Post와 User간의 N:1 관계를 나타내며, EAGER를 통해 Post 조회 시 연관된 User도 함께 조회
     @JoinColumn(name = "userid")	// User와 연결된 외래키의 이름을 userid로 설정한다는 것을 나타냄.
     private User user;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER,
+            cascade = CascadeType.REMOVE)
+    @OrderBy("createDate asc")
+    private List<Reply> replyList;
 
 }

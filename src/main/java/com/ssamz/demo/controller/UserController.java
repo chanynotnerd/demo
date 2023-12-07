@@ -3,9 +3,11 @@ package com.ssamz.demo.controller;
 import com.ssamz.demo.domain.RoleType;
 import com.ssamz.demo.domain.User;
 import com.ssamz.demo.dto.ResponseDTO;
+import com.ssamz.demo.dto.UserDTO;
 import com.ssamz.demo.exception.JBlogException;
 import com.ssamz.demo.persistance.UserRepository;
 import com.ssamz.demo.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,16 +15,24 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 @Controller
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping("/auth/insertUser")
     public String insertUser()
@@ -31,8 +41,23 @@ public class UserController {
     }
 
     @PostMapping("/auth/insertUser")
-    public @ResponseBody ResponseDTO<?> insertUser(@RequestBody User user)
+    public @ResponseBody ResponseDTO<?> insertUser(
+            @Valid @RequestBody UserDTO userDTO, BindingResult bindingResult)
     {
+    /*    // UserDTO 객체에 대한 유효성 검사, AOP로 검사해서 뺀다
+		if(bindingResult.hasErrors())
+		{
+			// 에러가 하나라도 있다면 에러 메세지를 Map에 등록
+			Map<String, String> errorMap = new HashMap<>();
+			for (FieldError error : bindingResult.getFieldErrors())
+			{
+				errorMap.put(error.getField(), error.getDefaultMessage());
+			}
+			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), errorMap);
+		}*/
+        // UserDTO -> User 객체로 변환
+        User user = modelMapper.map(userDTO, User.class);
+
         User findUser = userService.getUser(user.getUsername());
         System.out.println("Username: " + findUser.getUsername());
         if(findUser.getUsername() == null)

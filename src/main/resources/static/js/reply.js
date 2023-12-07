@@ -11,7 +11,7 @@ let replyObject = {
         let id = $("#postId").val();
 
         let reply = {
-            content: $("#reply-comment").val()
+            content: $("#reply-content").val()
         }
 
         $.ajax({
