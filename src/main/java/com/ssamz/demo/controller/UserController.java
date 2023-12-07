@@ -2,13 +2,16 @@ package com.ssamz.demo.controller;
 
 import com.ssamz.demo.domain.RoleType;
 import com.ssamz.demo.domain.User;
+import com.ssamz.demo.dto.ResponseDTO;
 import com.ssamz.demo.exception.JBlogException;
 import com.ssamz.demo.persistance.UserRepository;
+import com.ssamz.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +22,33 @@ import java.util.function.Supplier;
 @Controller
 public class UserController {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
-    @GetMapping("/user/page")
+    @GetMapping("/auth/insertUser")
+    public String insertUser()
+    {
+        return "user/insertUser";
+    }
+
+    @PostMapping("/auth/insertUser")
+    public @ResponseBody ResponseDTO<?> insertUser(@RequestBody User user)
+    {
+        User findUser = userService.getUser(user.getUsername());
+        System.out.println("Username: " + findUser.getUsername());
+        if(findUser.getUsername() == null)
+        {
+            userService.insertUser(user);
+            return new ResponseDTO<>(HttpStatus.OK.value(),
+                    user.getUsername() + "님 가입 성공");
+        }
+        else
+        {
+            return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(),
+                    user.getUsername() + "님은 이미 회원이십니다.");
+        }
+
+    }
+/*    @GetMapping("/user/page")
     public @ResponseBody Page<User> getUserListPaging(
 
             @PageableDefault(page = 0, size = 2, direction = Sort.Direction.DESC,
@@ -79,5 +106,5 @@ public class UserController {
         user.setRole(RoleType.USER);
         userRepository.save(user);
         return user.getUsername() + " 회원가입 성공";
-    }
+    }*/
 }
