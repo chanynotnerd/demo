@@ -4,6 +4,7 @@ import com.ssamz.demo.domain.Post;
 import com.ssamz.demo.domain.User;
 import com.ssamz.demo.dto.PostDTO;
 import com.ssamz.demo.dto.ResponseDTO;
+import com.ssamz.demo.security.UserDetailsImpl;
 import com.ssamz.demo.service.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -63,7 +65,7 @@ public class PostController {
     @PostMapping("/post")
     public @ResponseBody ResponseDTO<?> insertPost(
             @Valid @RequestBody PostDTO postDTO, BindingResult bindingResult,
-            HttpSession session)
+            HttpSession session, @AuthenticationPrincipal UserDetailsImpl principal)
     {
         /*// PostDTO 객체에 대한 유효성 검사, AOP로 유효성 검사해서 뺀다.
 		if(bindingResult.hasErrors())
@@ -79,8 +81,7 @@ public class PostController {
         // PostDTO -> Post 객체로 변환
         Post post = modelMapper.map(postDTO, Post.class);
         // Post 객체를 영속화하기 전 연관된 User 엔티티 설정
-        User principal = (User) session.getAttribute("principal");
-        post.setUser(principal);
+        post.setUser(principal.getUser());
         post.setCnt(0);
 
         postService.insertPost(post);

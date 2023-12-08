@@ -48,8 +48,8 @@ public class JBlogWebMvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry)
     {
-        registry.addInterceptor(
+       /* registry.addInterceptor(
                 new AuthenticateInterceptor()).addPathPatterns("/", "/post/**");
-        registry.addInterceptor(localeChangeInterceptor());
+        registry.addInterceptor(localeChangeInterceptor());*/
     }
 }

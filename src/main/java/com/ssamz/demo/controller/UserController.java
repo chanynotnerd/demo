@@ -6,6 +6,7 @@ import com.ssamz.demo.dto.ResponseDTO;
 import com.ssamz.demo.dto.UserDTO;
 import com.ssamz.demo.exception.JBlogException;
 import com.ssamz.demo.persistance.UserRepository;
+import com.ssamz.demo.security.UserDetailsImpl;
 import com.ssamz.demo.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -33,6 +35,27 @@ public class UserController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @PutMapping("/user")
+    public @ResponseBody ResponseDTO<?> updateUser(@RequestBody User user,
+                                                   @AuthenticationPrincipal UserDetailsImpl principal)
+    {
+        // 회원 정보 수정과 동시에 세션 갱신
+        principal.setUser(userService.updateUser(user));
+        return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + "수정 완료");
+    }
+
+    @GetMapping("/user/updateUser")
+    public String UpdateUser()
+    {
+        return "user/updateUser";
+    }
+
+    @GetMapping("/auth/login")
+    public String login()
+    {
+        return "system/login";
+    }
 
     @GetMapping("/auth/insertUser")
     public String insertUser()

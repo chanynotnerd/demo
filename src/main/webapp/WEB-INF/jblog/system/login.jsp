@@ -2,7 +2,7 @@
 <%@ include file="../layout/header.jsp" %>
 
 <div class="container mt-3">
-  <form>
+<form action="/auth/securitylogin" method="post">
   <div class="mb-3">
   <label for ="uname">
   <spring:message code="user.login.form.username" />:</label>
@@ -13,11 +13,8 @@
       <spring:message code="user.login.form.password" />:</label>
       <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
     </div>
+    <button id="btn-login" class="btn btn-secondary">로그인</button>
     </form>
-
-    <button id="btn-login" class="btn btn-secondary">
-        <spring:message code="user.login.form.login_btn" /></button>
 </div>
 
-<script src="/js/login.js"></script>
 <%@ include file="../layout/footer.jsp" %>

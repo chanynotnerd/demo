@@ -20,9 +20,6 @@ spring:
         view:
             prefix: /WEB-INF/jblog/
             suffix: .jsp
-    autoconfigure:
-        exclude:
-            - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
     datasource:
         password: 1234
         url: jdbc:mysql://127.0.0.1:3306/spring_test?serverTimezone=UTC
