@@ -32,7 +32,7 @@ public class JBloWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     {
         // 인증 없이 접근을 허용하는 경로
         http.authorizeRequests().antMatchers("/webjars/**", "/js/**", "/image/**",
-                "/", "/auth/**").permitAll();
+                "/", "/auth/**", "/oauth/**").permitAll();
 
         // 이외의 경로는 인증 필요
         http.authorizeRequests().anyRequest().authenticated();
