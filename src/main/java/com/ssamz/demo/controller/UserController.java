@@ -1,5 +1,6 @@
 package com.ssamz.demo.controller;
 
+import com.ssamz.demo.domain.OAuthType;
 import com.ssamz.demo.domain.RoleType;
 import com.ssamz.demo.domain.User;
 import com.ssamz.demo.dto.ResponseDTO;
@@ -10,6 +11,7 @@ import com.ssamz.demo.security.UserDetailsImpl;
 import com.ssamz.demo.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -36,10 +38,20 @@ public class UserController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Value("${kakao.default.password}")
+    private String kakaoPassword;
+
     @PutMapping("/user")
     public @ResponseBody ResponseDTO<?> updateUser(@RequestBody User user,
                                                    @AuthenticationPrincipal UserDetailsImpl principal)
     {
+        // 회원 정보 수정 전, 로그인에 성공한 사용자가 카카오 회원인지 확인
+        if(principal.getUser().getOauth().equals(OAuthType.KAKAO))
+        {
+            // 카카오 회원일 경우 비밀번호 고정
+            user.setPassword(kakaoPassword);
+        }
+
         // 회원 정보 수정과 동시에 세션 갱신
         principal.setUser(userService.updateUser(user));
         return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + "수정 완료");

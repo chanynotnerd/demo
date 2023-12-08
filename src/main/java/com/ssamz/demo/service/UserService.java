@@ -1,5 +1,6 @@
 package com.ssamz.demo.service;
 
+import com.ssamz.demo.domain.OAuthType;
 import com.ssamz.demo.domain.RoleType;
 import com.ssamz.demo.domain.User;
 import com.ssamz.demo.persistance.UserRepository;
@@ -48,10 +49,10 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         user.setRole(RoleType.USER);
-        /*if(user.getOauth() == null)
+        if(user.getOauth() == null)
         {
             user.setOauth(OAuthType.JBLOG);
-        }*/
+        }
         userRepository.save(user);
     }
 }
