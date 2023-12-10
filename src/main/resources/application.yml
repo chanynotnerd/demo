@@ -34,8 +34,21 @@ spring:
                 dialect: org.hibernate.dialect.MySQL8Dialect
                 format_sql: true
         show-sql: true
-
+    # Spring Security OAuth2 설정
+    security:
+        oauth2:
+            client:
+                registration:
+                    google:
+                        client-id: 337016381494-8i083j1ji3100ltrq2d5r7qjsiis2lrf.apps.googleusercontent.com
+                        client-secret: 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
+                        scope: email, profile
 # 카카오 비밀번호
 kakao:
     default:
         password: kakao123
+
+# 구글 비밀번호
+google:
+    default:
+        password: google123

@@ -22,7 +22,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;	// 회원 일련번호
 
-    @Column(nullable = false, length = 50, unique = true)
+    @Column(nullable = false, length = 100, unique = true)
     private String username;	// 로그인 아이디
 
     @Column(length = 100)

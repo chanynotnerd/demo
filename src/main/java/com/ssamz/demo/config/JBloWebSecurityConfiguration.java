@@ -1,5 +1,6 @@
 package com.ssamz.demo.config;
 
+import com.ssamz.demo.security.OAuth2UserDetailsServiceImpl;
 import com.ssamz.demo.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,25 +19,29 @@ public class JBloWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private OAuth2UserDetailsServiceImpl oauth2DetailsService;
+
     @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception
-    {
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder()
-    {
-        return new BCryptPasswordEncoder();
-    }
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception
-    {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    /*    @Bean
+        public PasswordEncoder passwordEncoder()
+        {
+            return new BCryptPasswordEncoder();
+        }
+        */
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception
-    {
+    protected void configure(HttpSecurity http) throws Exception {
         // 인증 없이 접근을 허용하는 경로
         http.authorizeRequests().antMatchers("/webjars/**", "/js/**", "/image/**",
                 "/", "/auth/**", "/oauth/**").permitAll();
@@ -55,5 +60,8 @@ public class JBloWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         // 로그아웃 설정
         http.logout().logoutUrl("/auth/logout").logoutSuccessUrl("/");
+
+        // 구글 로그인 설정
+        http.oauth2Login().defaultSuccessUrl("/", true);
     }
 }

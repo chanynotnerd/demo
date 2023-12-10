@@ -17,6 +17,8 @@
     <button id="btn-login" class="btn btn-secondary"><spring:message code="user.login.form.login_btn" /></button>
     <a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7726cc35fb60a4fcf57862d725f173de&redirect_uri=http://localhost:8080/oauth/kakao">
              			<img height="38px" src="/image/kakao_login_btn.png"></a>
+    <a href="../oauth2/authorization/google"> <img height="38px"
+    				src="/image/google_login_btn.png"></a>
     </div>
     </form>
 </div>

@@ -41,6 +41,9 @@ public class UserController {
     @Value("${kakao.default.password}")
     private String kakaoPassword;
 
+    @Value("${google.default.password}")
+    private String googlePassword;
+
     @PutMapping("/user")
     public @ResponseBody ResponseDTO<?> updateUser(@RequestBody User user,
                                                    @AuthenticationPrincipal UserDetailsImpl principal)
@@ -50,6 +53,11 @@ public class UserController {
         {
             // 카카오 회원일 경우 비밀번호 고정
             user.setPassword(kakaoPassword);
+        }
+        else if(principal.getUser().getOauth().equals(OAuthType.GOOGLE))
+        {
+            // 구글 회원일 경우 비밀번호 고정
+            user.setPassword(googlePassword);
         }
 
         // 회원 정보 수정과 동시에 세션 갱신
